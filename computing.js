@@ -14,69 +14,35 @@ function checkNums() {
   dispRes(noStr);
 }
 
-function bigBracketsFirst(procNum) {
-  var targetedStr=procNum;
-  if (procNum.includes("{")) {
-    if (procNum.split("{").length !== procNum.split("}").length) {
-      alert("Please check number of brackets you entered.");
-      return "Please check number of brackets you entered.";
-    } else {
-      while(targetedStr.includes("{")){
-        var n1 = targetedStr.lastIndexOf("{");
-        var tempStr1 = targetedStr.substring(n1 + 1, targetedStr.length);
-        var n2 = tempStr1.indexOf("}");
-        var n3 = n1 + n2;
-        var tempStr2 = targetedStr.substring(n3 + 2, targetedStr.length);
-        var newString = midBrackets(targetedStr.substring(n1 + 1, n3 + 1));
-        targetedStr = targetedStr.substring(0, n1) + newString + tempStr2;
-      }targetedStr = midBrackets(targetedStr);
-    }
-  } else {
-    targetedStr = midBrackets(procNum);
-  }
-  return targetedStr;
+function bigBracketsFirst(procNum){
+  return bracketsMath(procNum,"{","}",midBrackets)
 }
-function midBrackets(procNum) {
-  var targetedStr=procNum;
-  if (procNum.includes("[")) {
-    if (procNum.split("[").length !== procNum.split("]").length) {
-      alert("Please check number of brackets you entered.");
-      return "Please check number of brackets you entered.";
-    } else {
-      while(targetedStr.includes("[")){
-        var n1 = targetedStr.lastIndexOf("[");
-        var tempStr1 = targetedStr.substring(n1 + 1, targetedStr.length);
-        var n2 = tempStr1.indexOf("]");
-        var n3 = n1 + n2;
-        var tempStr2 = targetedStr.substring(n3 + 2, targetedStr.length);
-        var newString = regBrackets(targetedStr.substring(n1 + 1, n3 + 1));
-        targetedStr = targetedStr.substring(0, n1) + newString + tempStr2;
-      }targetedStr = regBrackets(targetedStr);
-    }
-  } else {
-    targetedStr = regBrackets(procNum);
-  }
-  return targetedStr;
+function midBrackets(procNum){
+  return bracketsMath(procNum,"[","]",regBrackets);
 }
-function regBrackets(procNum) {
+function regBrackets(procNum){
+  return bracketsMath(procNum,"(",")",computeNumsPlus);
+
+}
+function bracketsMath(procNum,openBracket,closeBracket,funcToCall) {
   var targetedStr=procNum;
-  if (procNum.includes("(")) {
-    if (procNum.split("(").length !== procNum.split(")").length) {
+  if (procNum.includes(openBracket)) {
+    if (procNum.split(openBracket).length !== procNum.split(closeBracket).length) {
       alert("Please check number of brackets you entered.");
       return "Please check number of brackets you entered.";
     } else {
-      while(targetedStr.includes("(")){
-        var n1 = targetedStr.lastIndexOf("(");
+      while(targetedStr.includes(openBracket)){
+        var n1 = targetedStr.lastIndexOf(openBracket);
         var tempStr1 = targetedStr.substring(n1 + 1, targetedStr.length);
-        var n2 = tempStr1.indexOf(")");
+        var n2 = tempStr1.indexOf(closeBracket);
         var n3 = n1 + n2;
         var tempStr2 = targetedStr.substring(n3 + 2, targetedStr.length);
-        var newString = computeNumsPlus(targetedStr.substring(n1 + 1, n3 + 1));
+        var newString = funcToCall(targetedStr.substring(n1 + 1, n3 + 1));
         targetedStr = targetedStr.substring(0, n1) + newString + tempStr2;
-      }targetedStr = computeNumsPlus(targetedStr);
+      }targetedStr = funcToCall(targetedStr);
     }
   } else {
-    targetedStr = computeNumsPlus(procNum);
+    targetedStr = funcToCall(procNum);
   }
   return targetedStr;
 }
